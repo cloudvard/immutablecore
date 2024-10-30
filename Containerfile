@@ -1,4 +1,4 @@
-FROM quay.io/fedora-ostree-desktops/base-atomic:41 AS imc-core
+FROM quay.io/fedora-ostree-desktops/base:41 AS imc-core
 
 ADD ./configs/ /
 
