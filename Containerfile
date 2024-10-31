@@ -1,4 +1,12 @@
-FROM quay.io/fedora-ostree-desktops/base:41 AS imc-core
+ARG SOURCE_REGISTRY="${SOURCE_REGISTRY:-quay.io}"
+ARG SOURCE_IMAGE="${IMAGE_NAME:-silverblue}"
+ARG SOURCE_ORG="${SOURCE_ORG:-fedora-ostree-desktops}"
+
+ARG IMAGE_REGISTRY="${SOURCE_REGISTRY}/${SOURCE_ORG}/${SOURCE_IMAGE}"
+ARG IMAGE_VERSION="${IMAGE_VERSION:-41}"
+
+
+FROM ${IMAGE_REGISTRY}:${IMAGE_VERSION} AS imc-core
 
 ADD ./configs/ /
 
