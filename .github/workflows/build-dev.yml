@@ -55,6 +55,11 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: |
             ${{ steps.generate-tags.outputs.build_tags }}
+          build-args: |
+            SOURCE_REGISTRY=${{ env.SOURCE_REGISTRY }}
+            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+            SOURCE_ORG=${{ env.SOURCE_ORG }}
+            IMAGE_VERSION=${{ env.IMAGE_VERSION }
 
       - name: Push to GHCR
         id: push
