@@ -34,7 +34,7 @@ RUN systemctl enable podman-auto-update.timer
 RUN systemctl enable flatpak-system-update.timer
 RUN systemctl --global enable flatpak-user-update.timer
 
-# RUN ostree container commit
+RUN ostree container commit
 
 # RUN rm -rf /tmp/* /var/* && \
 #     ostree container commit
