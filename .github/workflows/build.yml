@@ -53,6 +53,11 @@ jobs:
       - name: Build Image
         id: build-image
         uses: redhat-actions/buildah-build@v2
+        env:
+          SOURCE_REGISTRY: ${{ vars.SOURCE_REGISTRY || 'quay.io' }}
+          SOURCE_IMAGE: ${{ vars.SOURCE_IMAGE || 'silverblue' }}
+          SOURCE_ORG: ${{ vars.SOURCE_ORG || 'fedora-ostree-desktops' }}
+          IMAGE_VERSION: ${{ vars.IMAGE_VERSION || '41' }}
         with:
           oci: true
           containerfiles: |
@@ -61,10 +66,10 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.build_tags }}
           build-args: |
-            SOURCE_REGISTRY=$SOURCE_REGISTRY
-            SOURCE_IMAGE=$SOURCE_IMAGE
-            SOURCE_ORG=$SOURCE_ORG
-            IMAGE_VERSION=$IMAGE_VERSION
+            SOURCE_REGISTRY=${{ env.SOURCE_REGISTRY }}
+            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+            SOURCE_ORG=${{ env.SOURCE_ORG }}
+            IMAGE_VERSION=${{ env.IMAGE_VERSION }}
 
       - name: Push to GHCR
         id: push
