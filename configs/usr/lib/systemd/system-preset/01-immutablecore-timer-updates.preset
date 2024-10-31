@@ -1,0 +1,4 @@
+enable bootc-fetch-apply-updates.timer
+enable podman-auto-update.timer
+enable flatpak-system-update.timer
+disable flatpak-add-fedora-repos.service

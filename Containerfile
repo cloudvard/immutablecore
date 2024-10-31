@@ -1,10 +1,32 @@
-FROM quay.io/fedora/fedora-bootc:latest AS imc-main
+ARG SOURCE_REGISTRY="${SOURCE_REGISTRY:-quay.io}"
+ARG SOURCE_IMAGE="${IMAGE_NAME:-silverblue}"
+ARG SOURCE_ORG="${SOURCE_ORG:-fedora-ostree-desktops}"
 
-RUN dnf -y upgrade --refresh
-RUN dnf -y install fish neovim flatpak flatpak-spawn distrobox aria2 libratbag-ratbagd lshw net-tools zstd fzf bat fd-find
-RUN dnf -y install jetbrains-mono-fonts
+ARG IMAGE_REGISTRY="${SOURCE_REGISTRY}/${SOURCE_ORG}/${SOURCE_IMAGE}"
+ARG IMAGE_VERSION="${IMAGE_VERSION:-41}"
 
-ADD ./configs/usr/ /usr/
+
+FROM ${IMAGE_REGISTRY}:${IMAGE_VERSION} AS imc-core
+
+ADD ./configs/ /
+
+RUN dnf install -y \
+  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+RUN dnf install -y fish neovim aria2 lshw net-tools zstd fzf bat fd-find distrobox gnome-tweaks
+RUN dnf install -y code
+
+RUN dnf group install -y multimedia
+RUN dnf swap -y ffmpeg-free ffmpeg --allowerasing
+RUN dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+RUN dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+
+RUN dnf install -y jetbrains-mono-fonts-all rsms-inter-fonts \
+    google-go-mono-fonts google-droid-sans-mono-fonts \
+    fira-code-fonts mozilla-fira-sans-fonts powerline-fonts
+    
+RUN dnf remove -y firefox firefox-langpacks gnome-shell-extension-background-logo
 
 RUN systemctl disable flatpak-add-fedora-repos.service
 RUN systemctl enable bootc-fetch-apply-updates.timer
@@ -12,13 +34,7 @@ RUN systemctl enable podman-auto-update.timer
 RUN systemctl enable flatpak-system-update.timer
 RUN systemctl --global enable flatpak-user-update.timer
 
-RUN chsh -s /usr/bin/fish root
+# RUN ostree container commit
 
-FROM imc-main AS imc-gnome
-RUN dnf -y group install "Fedora Workstation" --exclude=rootfiles,firefox,firefox-langpacks,gnome-terminal,gnome-terminal-nautilus,gnome-shell-extension-background-logo
-RUN dnf -y install gnome-console
-RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
-RUN echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-RUN dnf -y check-update
-RUN dnf -y install code
-# RUN dnf -y groupinstall "KDE Plasma Workspaces"
+# RUN rm -rf /tmp/* /var/* && \
+#     ostree container commit
