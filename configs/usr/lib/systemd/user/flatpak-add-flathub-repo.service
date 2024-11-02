@@ -10,4 +10,4 @@ ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title "Flathub" f
 ExecStartPost=/usr/bin/touch /%h/.local/share/flatpak/.flathub-initialized
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
