@@ -1,0 +1,13 @@
+[Unit]
+Description=Add Flathub flatpak repositories
+ConditionPathExists=!/%h/.config/.imc-flathub-initialized
+Before=flatpak-session-helper.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title "Flathub Flatpaks" flathub https://flathub.org/repo/flathub.flatpakrepo
+ExecStartPost=/usr/bin/touch /%h/.config/.imc-flathub-initialized
+
+[Install]
+WantedBy=default.target

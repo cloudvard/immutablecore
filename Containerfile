@@ -33,6 +33,7 @@ RUN systemctl enable bootc-fetch-apply-updates.timer
 RUN systemctl enable podman-auto-update.timer
 RUN systemctl enable flatpak-system-update.timer
 RUN systemctl --global enable flatpak-user-update.timer
+RUN systemctl --global enable podman-auto-update.timer
 
 RUN ostree container commit
 
