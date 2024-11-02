@@ -10,4 +10,4 @@ ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title "Flathub Fl
 ExecStartPost=/usr/bin/touch /%h/.config/.imc-flathub-initialized
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
