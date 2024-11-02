@@ -9,6 +9,8 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/flatpak remote-delete --system --force fedora
 ExecStart=/usr/bin/flatpak remote-delete --system --force fedora-testing
+ExecStart=/usr/bin/flatpak remote-delete --system --force flathub
+ExecStart=/usr/bin/flatpak uninstall --system --all --unused --delete-data -y --noninteractive
 ExecStartPost=/usr/bin/touch /var/lib/flatpak/.fedora-removed
 
 [Install]
