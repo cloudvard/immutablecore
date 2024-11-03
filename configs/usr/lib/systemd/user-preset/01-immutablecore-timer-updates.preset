@@ -1,1 +1,2 @@
+enable podman-auto-update.timer
 enable flatpak-user-update.timer

@@ -1,0 +1,16 @@
+[Unit]
+Description=Remove Fedora flatpak repositories
+ConditionPathExists=!/var/lib/flatpak/.fedora-removed
+After=flatpak-add-fedora-repos.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=-/usr/bin/flatpak remote-delete --system --force fedora
+ExecStart=-/usr/bin/flatpak remote-delete --system --force fedora-testing
+ExecStart=-/usr/bin/flatpak remote-delete --system --force flathub
+ExecStart=/usr/bin/flatpak uninstall --system --all -y --noninteractive
+ExecStartPost=/usr/bin/touch /var/lib/flatpak/.fedora-removed
+
+[Install]
+WantedBy=multi-user.target
