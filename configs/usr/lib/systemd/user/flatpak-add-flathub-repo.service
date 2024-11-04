@@ -6,7 +6,7 @@ Before=flatpak-session-helper.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title "Flathub" flathub https://flathub.org/repo/flathub.flatpakrepo
+ExecStart=/usr/bin/flatpak remote-add --user --if-not-exists --title "Flathub" flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 ExecStartPost=/usr/bin/touch /%h/.local/share/flatpak/.flathub-initialized
 
 [Install]

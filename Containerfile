@@ -11,7 +11,6 @@ FROM ${IMAGE_REGISTRY}:${IMAGE_VERSION} AS imc-core
 LABEL org.opencontainers.image.description "Cloudvard's ImmutableCore Atomic OS"
 LABEL org.opencontainers.image.url https://github.com/cloudvard/immutablecore
 LABEL org.opencontainers.image.source https://github.com/cloudvard/immutablecore
-LABEL org.opencontainers.image.version 41
 LABEL org.opencontainers.image.vendor Cloudvard
 LABEL org.opencontainers.image.authors Cloudvard
 LABEL org.opencontainers.image.title "ImmutableCore Atomic OS"
