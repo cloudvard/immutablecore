@@ -70,6 +70,13 @@ jobs:
             SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
             SOURCE_ORG=${{ env.SOURCE_ORG }}
             IMAGE_VERSION=${{ env.IMAGE_VERSION }}
+          extra-args: |
+            --annotation=org.opencontainers.image.description=Cloudvard's ImmutableCore Atomic OS
+            --annotation=org.opencontainers.image.url=https://github.com/cloudvard/immutablecore
+            --annotation=org.opencontainers.image.source=https://github.com/cloudvard/immutablecore
+            --annotation=org.opencontainers.image.vendor=Cloudvard
+            --annotation=org.opencontainers.image.authors=Cloudvard
+            --annotation=org.opencontainers.image.title=ImmutableCore Atomic OS
 
       - name: Push to GHCR
         id: push
