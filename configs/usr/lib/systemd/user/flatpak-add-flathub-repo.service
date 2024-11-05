@@ -2,6 +2,8 @@
 Description=Add Flathub flatpak repositories
 ConditionPathExists=!/%h/.local/share/flatpak/.flathub-initialized
 Before=flatpak-session-helper.service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=oneshot
