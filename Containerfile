@@ -34,6 +34,8 @@ RUN dnf install -y jetbrains-mono-fonts rsms-inter-fonts \
     
 RUN dnf remove -y firefox firefox-langpacks gnome-shell-extension-background-logo
 
+RUN dnf clean all
+
 RUN systemctl disable flatpak-add-fedora-repos.service
 RUN systemctl enable bootc-fetch-apply-updates.timer
 RUN systemctl enable podman-auto-update.timer
