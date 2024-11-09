@@ -6,7 +6,7 @@ ARG IMAGE_REGISTRY="${SOURCE_REGISTRY}/${SOURCE_ORG}/${SOURCE_IMAGE}"
 ARG IMAGE_VERSION="${IMAGE_VERSION:-41}"
 
 
-FROM ${IMAGE_REGISTRY}:${IMAGE_VERSION} AS imc-core
+FROM ${IMAGE_REGISTRY}:${IMAGE_VERSION} AS imc
 
 LABEL org.opencontainers.image.description "Cloudvard's ImmutableCore Atomic OS"
 LABEL org.opencontainers.image.url https://github.com/cloudvard/immutablecore
@@ -49,3 +49,17 @@ RUN ostree container commit
 
 # RUN rm -rf /tmp/* /var/* && \
 #     ostree container commit
+
+FROM imc AS imc-pro
+
+LABEL org.opencontainers.image.description "Cloudvard's ImmutableCore Atomic OS PRO Edition"
+LABEL org.opencontainers.image.title "ImmutableCore Atomic OS Pro"
+
+RUN dnf install -y cockpit-system cockpit-ostree cockpit-podman \
+    cockpit-machines cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-files
+
+RUN dnf group install -y virtualization
+
+RUN dnf clean all
+
+RUN ostree container commit
