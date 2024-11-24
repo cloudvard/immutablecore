@@ -11,7 +11,7 @@ jobs:
     env:
       IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
       IMAGE_NAME: ${{ vars.IMAGE_NAME || 'imc-dev' }}
-      PRO_IMAGE_NAME: ${{ vars.PRO_IMAGE_NAME || 'imc-pro' }}
+      PRO_IMAGE_NAME: ${{ vars.PRO_IMAGE_NAME || 'imc-pro-dev' }}
       SOURCE_REGISTRY: ${{ vars.SOURCE_REGISTRY || 'quay.io' }}
       SOURCE_IMAGE: ${{ vars.SOURCE_IMAGE || 'silverblue' }}
       SOURCE_ORG: ${{ vars.SOURCE_ORG || 'fedora-ostree-desktops' }}
@@ -113,3 +113,17 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
           extra-args: |
             --disable-content-trust
+
+      - name: Delete Base Image Versions
+        uses: actions/delete-package-versions@v5.0.0
+        with:
+          package-name: ${{ env.IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 1
+
+      - name: Delete Pro Image Versions
+        uses: actions/delete-package-versions@v5.0.0
+        with:
+          package-name: ${{ env.PRO_IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 1
