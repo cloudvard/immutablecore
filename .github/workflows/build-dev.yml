@@ -117,7 +117,8 @@ jobs:
   cleanup-packages:
     name: Cleanup Old Packages
     runs-on: ubuntu-latest
-    environment: production
+    needs: build-dev-image
+    environment: dev
     env:
       IMAGE_NAME: ${{ vars.IMAGE_NAME || 'imc-dev' }}
       PRO_IMAGE_NAME: ${{ vars.PRO_IMAGE_NAME || 'imc-pro-dev' }}
@@ -125,13 +126,11 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write
 
     steps:
       - name: Delete Base Image Versions
         uses: actions/delete-package-versions@v5.0.0
         with:
-          owner: ${{ github.repository_owner }}
           package-name: ${{ env.IMAGE_NAME }}
           package-type: container
           min-versions-to-keep: 1
@@ -139,7 +138,6 @@ jobs:
       - name: Delete Pro Image Versions
         uses: actions/delete-package-versions@v5.0.0
         with:
-          owner: ${{ github.repository_owner }}
           package-name: ${{ env.PRO_IMAGE_NAME }}
           package-type: container
           min-versions-to-keep: 1
