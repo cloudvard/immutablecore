@@ -1,8 +1,8 @@
 [Unit]
 Description=Add Flathub flatpak repositories
 ConditionPathExists=!/%h/.local/share/flatpak/.flathub-initialized
-Wants=flatpak-user-wait-online.service
-After=flatpak-user-wait-online.service
+Wants=user-wait-online.service
+After=user-wait-online.service
 
 [Service]
 Type=oneshot
