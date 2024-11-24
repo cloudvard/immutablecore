@@ -1,9 +1,6 @@
 name: build-immutablecore
 
 on:
-  push:
-    branches:
-      - master
   schedule:
     - cron: 5 4 * * *
   workflow_dispatch:
@@ -13,18 +10,19 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
     environment: production
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-
     env:
       IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
       IMAGE_NAME: ${{ vars.IMAGE_NAME || 'imc' }}
+      PRO_IMAGE_NAME: ${{ vars.PRO_IMAGE_NAME || 'imc-pro' }}
       SOURCE_REGISTRY: ${{ vars.SOURCE_REGISTRY || 'quay.io' }}
       SOURCE_IMAGE: ${{ vars.SOURCE_IMAGE || 'silverblue' }}
       SOURCE_ORG: ${{ vars.SOURCE_ORG || 'fedora-ostree-desktops' }}
       IMAGE_VERSION: ${{ vars.IMAGE_VERSION || '41' }}
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Checkout repository content
@@ -50,19 +48,17 @@ jobs:
 
           echo "build_tags=${build_tags[*]}" >> $GITHUB_OUTPUT
 
-      - name: Build Image
-        id: build-image
+      - name: Build Base Image
+        id: build-base-image
         uses: redhat-actions/buildah-build@v2
-        env:
-          SOURCE_REGISTRY: ${{ vars.SOURCE_REGISTRY || 'quay.io' }}
-          SOURCE_IMAGE: ${{ vars.SOURCE_IMAGE || 'silverblue' }}
-          SOURCE_ORG: ${{ vars.SOURCE_ORG || 'fedora-ostree-desktops' }}
-          IMAGE_VERSION: ${{ vars.IMAGE_VERSION || '41' }}
         with:
           oci: true
           containerfiles: |
             ./Containerfile
           image: ${{ env.IMAGE_NAME }}
+          layers: true
+          extra-args: |
+            --target=imc
           tags: |
             ${{ steps.generate-tags.outputs.build_tags }}
           build-args: |
@@ -71,17 +67,65 @@ jobs:
             SOURCE_ORG=${{ env.SOURCE_ORG }}
             IMAGE_VERSION=${{ env.IMAGE_VERSION }}
 
-      - name: Push to GHCR
-        id: push
+      - name: Build Pro Image
+        id: build-pro-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          oci: true
+          containerfiles: |
+            ./Containerfile
+          image: ${{ env.PRO_IMAGE_NAME }}
+          layers: true
+          extra-args: |
+            --target=imc-pro
+          tags: |
+            ${{ steps.generate-tags.outputs.build_tags }}
+          build-args: |
+            SOURCE_REGISTRY=${{ env.SOURCE_REGISTRY }}
+            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+            SOURCE_ORG=${{ env.SOURCE_ORG }}
+            IMAGE_VERSION=${{ env.IMAGE_VERSION }}
+
+      - name: Push Base Image to GHCR
+        id: base-image-push
         uses: redhat-actions/push-to-registry@v2
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          image: ${{ steps.build-image.outputs.image }}
-          tags: ${{ steps.build-image.outputs.tags }}
+          image: ${{ steps.build-base-image.outputs.image }}
+          tags: ${{ steps.build-base-image.outputs.tags }}
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
           extra-args: |
             --disable-content-trust
+
+      - name: Push Pro Image to GHCR
+        id: pro-image-push
+        uses: redhat-actions/push-to-registry@v2
+        env:
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_PASSWORD: ${{ github.token }}
+        with:
+          image: ${{ steps.build-pro-image.outputs.image }}
+          tags: ${{ steps.build-pro-image.outputs.tags }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          extra-args: |
+            --disable-content-trust
+
+      - name: Delete Base Image Versions
+        uses: actions/delete-package-versions@v5.0.0
+        with:
+          package-name: ${{ env.IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 10
+
+      - name: Delete Pro Image Versions
+        uses: actions/delete-package-versions@v5.0.0
+        with:
+          package-name: ${{ env.PRO_IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 10
