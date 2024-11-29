@@ -58,8 +58,6 @@ LABEL org.opencontainers.image.title "ImmutableCore Atomic OS Pro"
 RUN dnf install -y cockpit-system cockpit-ostree cockpit-podman \
     cockpit-machines cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-files
 
-RUN dnf group install -y virtualization
-
 RUN dnf clean all
 
 RUN ostree container commit
