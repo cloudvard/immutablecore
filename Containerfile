@@ -25,9 +25,9 @@ RUN dnf install -y fish neovim aria2 lshw net-tools zstd fzf bat fd-find distrob
 RUN dnf install -y code
 
 RUN dnf group install -y multimedia
-RUN dnf swap -y ffmpeg-free ffmpeg --allowerasing
-RUN dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-RUN dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+# RUN dnf swap -y ffmpeg-free ffmpeg --allowerasing
+# RUN dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+# RUN dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 RUN dnf install -y jetbrains-mono-fonts rsms-inter-fonts \
     google-go-mono-fonts fira-code-fonts mozilla-fira-sans-fonts

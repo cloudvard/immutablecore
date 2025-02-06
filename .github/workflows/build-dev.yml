@@ -65,24 +65,24 @@ jobs:
             SOURCE_ORG=${{ env.SOURCE_ORG }}
             IMAGE_VERSION=${{ env.IMAGE_VERSION }}
 
-      - name: Build Pro Image
-        id: build-pro-image
-        uses: redhat-actions/buildah-build@v2
-        with:
-          oci: true
-          containerfiles: |
-            ./Containerfile
-          image: ${{ env.PRO_IMAGE_NAME }}
-          layers: true
-          extra-args: |
-            --target=imc-pro
-          tags: |
-            ${{ steps.generate-tags.outputs.build_tags }}
-          build-args: |
-            SOURCE_REGISTRY=${{ env.SOURCE_REGISTRY }}
-            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
-            SOURCE_ORG=${{ env.SOURCE_ORG }}
-            IMAGE_VERSION=${{ env.IMAGE_VERSION }}
+      # - name: Build Pro Image
+      #   id: build-pro-image
+      #   uses: redhat-actions/buildah-build@v2
+      #   with:
+      #     oci: true
+      #     containerfiles: |
+      #       ./Containerfile
+      #     image: ${{ env.PRO_IMAGE_NAME }}
+      #     layers: true
+      #     extra-args: |
+      #       --target=imc-pro
+      #     tags: |
+      #       ${{ steps.generate-tags.outputs.build_tags }}
+      #     build-args: |
+      #       SOURCE_REGISTRY=${{ env.SOURCE_REGISTRY }}
+      #       SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+      #       SOURCE_ORG=${{ env.SOURCE_ORG }}
+      #       IMAGE_VERSION=${{ env.IMAGE_VERSION }}
 
       - name: Push Base Image to GHCR
         id: base-image-push
@@ -99,20 +99,20 @@ jobs:
           extra-args: |
             --disable-content-trust
 
-      - name: Push Pro Image to GHCR
-        id: pro-image-push
-        uses: redhat-actions/push-to-registry@v2
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
-        with:
-          image: ${{ steps.build-pro-image.outputs.image }}
-          tags: ${{ steps.build-pro-image.outputs.tags }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
-          extra-args: |
-            --disable-content-trust
+      # - name: Push Pro Image to GHCR
+      #   id: pro-image-push
+      #   uses: redhat-actions/push-to-registry@v2
+      #   env:
+      #     REGISTRY_USER: ${{ github.actor }}
+      #     REGISTRY_PASSWORD: ${{ github.token }}
+      #   with:
+      #     image: ${{ steps.build-pro-image.outputs.image }}
+      #     tags: ${{ steps.build-pro-image.outputs.tags }}
+      #     registry: ${{ env.IMAGE_REGISTRY }}
+      #     username: ${{ env.REGISTRY_USER }}
+      #     password: ${{ env.REGISTRY_PASSWORD }}
+      #     extra-args: |
+      #       --disable-content-trust
 
   cleanup-packages:
     name: Cleanup Old Packages
