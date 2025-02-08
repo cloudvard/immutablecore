@@ -45,8 +45,6 @@ RUN systemctl --global enable flatpak-user-update.timer
 RUN systemctl --global enable podman-auto-update.timer
 RUN systemctl --global enable flatpak-add-flathub-repo.service
 
-RUN echo VARIANT="ImmutableCore OS" && echo VARIANT_ID=com.github.cloudvard.imc >> /usr/lib/os-release
-
 RUN ostree container commit
     
 FROM imc AS imc-pro
@@ -63,7 +61,5 @@ RUN curl -sSL https://repo.45drives.com/setup | bash
 RUN dnf install -y cockpit-file-sharing
 
 RUN dnf clean all
-
-RUN echo VARIANT="ImmutableCore OS (PRO Edition)" && echo VARIANT_ID=com.github.cloudvard.imcpro >> /usr/lib/os-release
 
 RUN ostree container commit
