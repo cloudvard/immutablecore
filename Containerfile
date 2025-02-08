@@ -55,8 +55,13 @@ FROM imc AS imc-pro
 LABEL org.opencontainers.image.description "Cloudvard's ImmutableCore Atomic OS PRO Edition"
 LABEL org.opencontainers.image.title "ImmutableCore Atomic OS Pro"
 
-RUN dnf install -y cockpit-system cockpit-ostree cockpit-podman \
+RUN dnf install -y cockpit-system cockpit-ws cockpit-ostree cockpit-podman cockpit-bridge \
     cockpit-machines cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-files
+
+RUN dnf install -y coreutils attr findutils hostname iproute glibc-common systemd nfs-utils samba-common-tools
+
+RUN curl -sSL https://repo.45drives.com/setup | bash
+RUN dnf install -y cockpit-file-sharing
 
 RUN dnf clean all
 
