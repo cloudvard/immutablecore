@@ -45,7 +45,7 @@ RUN systemctl --global enable flatpak-user-update.timer
 RUN systemctl --global enable podman-auto-update.timer
 RUN systemctl --global enable flatpak-add-flathub-repo.service
 
-RUN RUN echo VARIANT="ImmutableCore OS" && echo VARIANT_ID=com.github.cloudvard.imc >> /usr/lib/os-release
+RUN echo VARIANT="ImmutableCore OS" && echo VARIANT_ID=com.github.cloudvard.imc >> /usr/lib/os-release
 
 RUN rm -rf /tmp/* /var/* && \
     ostree container commit
@@ -65,7 +65,7 @@ RUN dnf install -y cockpit-file-sharing
 
 RUN dnf clean all
 
-RUN RUN echo VARIANT="ImmutableCore OS (PRO Edition)" && echo VARIANT_ID=com.github.cloudvard.imcpro >> /usr/lib/os-release
+RUN echo VARIANT="ImmutableCore OS (PRO Edition)" && echo VARIANT_ID=com.github.cloudvard.imcpro >> /usr/lib/os-release
 
 RUN rm -rf /tmp/* /var/* && \
     ostree container commit
