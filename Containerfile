@@ -47,9 +47,8 @@ RUN systemctl --global enable flatpak-add-flathub-repo.service
 
 RUN echo VARIANT="ImmutableCore OS" && echo VARIANT_ID=com.github.cloudvard.imc >> /usr/lib/os-release
 
-RUN rm -rf /tmp/* /var/* && \
-    ostree container commit
-
+RUN ostree container commit
+    
 FROM imc AS imc-pro
 
 LABEL org.opencontainers.image.description "Cloudvard's ImmutableCore Atomic OS PRO Edition"
@@ -67,5 +66,4 @@ RUN dnf clean all
 
 RUN echo VARIANT="ImmutableCore OS (PRO Edition)" && echo VARIANT_ID=com.github.cloudvard.imcpro >> /usr/lib/os-release
 
-RUN rm -rf /tmp/* /var/* && \
-    ostree container commit
+RUN ostree container commit
