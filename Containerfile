@@ -60,9 +60,6 @@ RUN dnf install -y cockpit-system cockpit-ws cockpit-ostree cockpit-podman cockp
 
 RUN dnf install -y coreutils attr findutils hostname iproute glibc-common systemd nfs-utils samba samba-common-tools corectrl
 
-RUN dnf copr enable -y lizardbyte/stable
-RUN dnf install -y sunshine
-
 RUN dnf clean all
 
 RUN ostree container commit
