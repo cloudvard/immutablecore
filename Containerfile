@@ -18,20 +18,20 @@ LABEL org.opencontainers.image.title "ImmutableCore Atomic OS"
 ADD ./configs/ /
 
 RUN dnf install -y \
-  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
-RUN dnf install -y fish neovim aria2 lshw net-tools zstd fzf bat fd-find distrobox gnome-tweaks go
+RUN dnf install -y fish neovim aria2 lshw net-tools zstd fzf bat fd-find distrobox gnome-tweaks go htop
 RUN dnf install -y code
 
 RUN dnf group install -y multimedia
 RUN dnf swap -y ffmpeg-free ffmpeg --allowerasing
-RUN dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-RUN dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+# RUN dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+# RUN dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 RUN dnf install -y jetbrains-mono-fonts rsms-inter-fonts \
     google-go-mono-fonts fira-code-fonts
-    
+
 RUN dnf remove -y firefox firefox-langpacks gnome-shell-extension-background-logo
 
 RUN dnf clean all
@@ -59,6 +59,8 @@ RUN dnf install -y cockpit-system cockpit-ws cockpit-ostree cockpit-podman cockp
     cockpit-machines cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-files
 
 RUN dnf install -y coreutils attr findutils hostname iproute glibc-common systemd nfs-utils samba samba-common-tools corectrl
+
+RUN dnf install antigravity
 
 RUN dnf clean all
 
