@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Base Image
         id: build-base-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           oci: true
           containerfiles: |
@@ -69,7 +69,7 @@ jobs:
 
       - name: Build Pro Image
         id: build-pro-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           oci: true
           containerfiles: |
@@ -88,7 +88,7 @@ jobs:
 
       - name: Push Base Image to GHCR
         id: base-image-push
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
@@ -103,7 +103,7 @@ jobs:
 
       - name: Push Pro Image to GHCR
         id: pro-image-push
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
