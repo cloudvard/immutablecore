@@ -60,7 +60,7 @@ RUN dnf install -y cockpit-system cockpit-ws cockpit-ostree cockpit-podman cockp
 
 RUN dnf install -y coreutils attr findutils hostname iproute glibc-common systemd nfs-utils samba samba-common-tools corectrl
 
-RUN dnf install -y antigravity
+RUN curl -sfL https://get.rke2.io | sh -
 
 RUN dnf clean all
 
