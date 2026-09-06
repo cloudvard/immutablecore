@@ -60,7 +60,24 @@ RUN dnf install -y cockpit-system cockpit-ws cockpit-ostree cockpit-podman cockp
 
 RUN dnf install -y coreutils attr findutils hostname iproute glibc-common systemd nfs-utils samba samba-common-tools corectrl
 
-RUN curl -sfL https://get.rke2.io | sh -
+RUN curl -sfL https://get.k3s.io \
+    | INSTALL_K3S_BIN_DIR=/usr/bin \
+    INSTALL_K3S_SKIP_START=true \
+    INSTALL_K3S_SKIP_ENABLE=true \
+    INSTALL_K3S_SELINUX_WARN=true \
+    sh -
+
+RUN dnf install -y helm
+
+RUN curl -s https://fluxcd.io/install.sh | bash -s -- /usr/bin
+
+RUN set -eux; \
+    curl -fL \
+    "$(curl -fsSL https://api.github.com/repos/longhorn/cli/releases/latest \
+    | grep '"browser_download_url".*longhornctl-linux-amd64"' \
+    | cut -d '"' -f 4)" \
+    -o /usr/bin/longhornctl; \
+    chmod 0755 /usr/bin/longhornctl
 
 RUN dnf clean all
 
